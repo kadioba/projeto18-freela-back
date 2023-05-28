@@ -2,9 +2,10 @@ import { db } from "../database/database.connection.js";
 
 export async function getFlightsByDestination(req, res) {
     try {
-        const flights = await db.query(`SELECT flights.id, flights."departureTime", cities.name AS origin
+        const flights = await db.query(`SELECT flights.id, flights."departureTime", flights.price, cities.name AS origin, "flightPictures".url AS picture
         FROM flights
         JOIN cities ON cities.id = flights."originId"
+        JOIN "flightPictures" ON "flightPictures"."flightId" = flights.id
         WHERE flights."destinationId" = $1`, [req.params.destinationId]);
         res.status(200).send(flights.rows);
     } catch (error) {
