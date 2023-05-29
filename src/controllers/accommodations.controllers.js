@@ -15,12 +15,20 @@ export async function getAccommodationsByDestinationId(req, res) {
 
 export async function getAccommodationById(req, res) {
     try {
-        const accommodation = await db.query(`SELECT accommodations.*, cities.name AS location, "accommodationsPictures".id AS pictureId, "accommodationsPictures".url AS pictureUrl
-        FROM accommodations
-        LEFT JOIN cities ON cities.id = accommodations."locationId"
-        LEFT JOIN "accommodationsPictures" ON "accommodationsPictures"."accommodationId" = accommodations.id
-        WHERE accommodations.id = $1`, [req.params.id]);
-        res.status(200).send(accommodation.rows);
+        const accommodation = await db.query(`SELECT accommodations.*, cities.name AS location
+                FROM accommodations
+                LEFT JOIN cities ON cities.id = accommodations."locationId"
+                WHERE accommodations.id = $1`, [req.params.id]);
+        const pictures = await db.query(`SELECT * FROM "accommodationsPictures" WHERE "accommodationId" = $1`, [req.params.id]);
+        const conveniences = await db.query(`SELECT "accommodationsConveniences".id, conveniences.name
+                 FROM "accommodationsConveniences"
+                 JOIN conveniences ON conveniences.id = "accommodationsConveniences"."convenienceId"
+                 WHERE "accommodationsConveniences"."accommodationId" = $1`, [req.params.id]);
+
+        const response = {
+            ...accommodation.rows[0], pictures: pictures.rows, conveniences: conveniences.rows
+        }
+        res.status(200).send(response);
     } catch (error) {
         res.status(500).send(error);
     }
