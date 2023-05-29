@@ -1,4 +1,3 @@
-import { db } from "../database/database.connection.js";
 import { getAccommodationByIdDB, getAccommodationsByDestinationIdDB, getAccommodationsConveniencesDB, getAccomodationPicturesDB, postAccommodationConvenienceDB, postAccommodationDB, postAccommodationPictureDB, setMainAccommodationPictureDB } from "../repositories/accommodations.repository.js";
 
 export async function getAccommodationsByDestinationId(req, res) {

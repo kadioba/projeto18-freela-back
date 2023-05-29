@@ -1,4 +1,3 @@
-import { db } from "../database/database.connection.js";
 import { getCitiesDB, getCityByIdDB } from "../repositories/cities.repository.js";
 
 export async function getCities(req, res) {

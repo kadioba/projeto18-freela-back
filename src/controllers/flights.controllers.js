@@ -1,4 +1,3 @@
-import { db } from "../database/database.connection.js";
 import { getFlightByIdDB, getFlightsByDesinationDB, postFlightDB, postFlightPictureDB } from "../repositories/flights.repository.js";
 
 export async function getFlightsByDestination(req, res) {
