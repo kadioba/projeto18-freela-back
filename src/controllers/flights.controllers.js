@@ -26,3 +26,16 @@ export async function getFlightById(req, res) {
         res.status(500).send(error);
     }
 }
+
+export async function postFlight(req, res) {
+    const flight = req.body;
+    try {
+        const newFlight = await db.query(`INSERT INTO flights ("originId", "destinationId", "departureTime", "arrivalTime", "flightCompanyId", price)
+        VALUES ($1, $2, $3, $4, $5, $6) RETURNING id`, [flight.originId, flight.destinationId, flight.departureTime, flight.arrivalTime, flight.flightCompanyId, flight.price]);
+        await db.query(`INSERT INTO "flightPictures" ("flightId", url)
+        VALUES ($1, $2)`, [newFlight.rows[0].id, flight.picture]);
+        res.status(200).send("Flight added");
+    } catch (error) {
+        res.status(500).send(error);
+    }
+}
